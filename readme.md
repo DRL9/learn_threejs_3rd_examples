@@ -1,5 +1,3 @@
-# Infinite_Jumper_Phaser3_Modern_JavaScript
-
-*Infinite_Jumper_Phaser3_Modern_JavaScript.pdf* code
+# learn threejs 示例
 
 use vscode extension **ritwickdey.LiveServer** to start static server
