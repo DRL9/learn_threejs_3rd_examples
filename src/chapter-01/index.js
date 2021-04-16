@@ -1,4 +1,5 @@
 import THREE from '../three.js';
+import Stats from '../stats.js';
 
 const canvasWrap = document.getElementById('canvasWrap');
 
@@ -19,8 +20,8 @@ function init() {
     canvasWrap.appendChild(renderer.domElement);
 
     addPlane(scene);
-    addSphere(scene);
-    addCube(scene);
+    const sphere = addSphere(scene);
+    const cube = addCube(scene);
 
     // 帮助debug用的, x 红色, y 绿色, z 蓝色
     // 右手坐标系
@@ -33,7 +34,21 @@ function init() {
     camera.lookAt(scene.position);
 
     enableShadow(scene, renderer, spotLight);
-    renderer.render(scene, camera);
+
+    let stats = initStats();
+    let i = 0;
+    function render() {
+        cube.position.setX((cube.position.x + 0.1) % 50);
+        sphere.position.set(
+            14 * Math.cos(i++ * Math.PI * 0.01),
+            sphere.position.y,
+            14 * Math.sin(i * Math.PI * 0.01)
+        );
+        renderer.render(scene, camera);
+        stats.update();
+        requestAnimationFrame(render);
+    }
+    render();
 }
 
 init();
@@ -55,6 +70,7 @@ function addPlane(scene, useBasicMaterial) {
     // 也就是 y z 平面上
     plane.rotation.x = -0.5 * Math.PI;
     scene.add(plane);
+    return plane;
 }
 /**
  *
@@ -75,6 +91,7 @@ function addCube(scene, useBasicMaterial) {
     const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
     cube.position.set(-4, 3, 0);
     scene.add(cube);
+    return cube;
 }
 
 /**
@@ -95,6 +112,8 @@ function addSphere(scene, useBasicMaterial) {
     const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
     sphere.position.set(20, 4, 2);
     scene.add(sphere);
+
+    return sphere;
 }
 
 /**
@@ -134,4 +153,15 @@ function enableShadow(scene, renderer, spotLight) {
             }
         }
     );
+}
+
+function initStats(type) {
+    var panelType =
+        typeof type !== 'undefined' && type && !isNaN(type)
+            ? parseInt(type)
+            : 0;
+    var stats = new Stats();
+    stats.showPanel(panelType); // 0: fps, 1: ms, 2: mb, 3+: custom
+    document.body.appendChild(stats.dom);
+    return stats;
 }
