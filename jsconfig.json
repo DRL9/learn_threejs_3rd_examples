@@ -4,6 +4,6 @@
         "target": "es2020"
     },
     "typeAcquisition": {
-        "include": ["three"]
+        "include": ["three", "dat.gui"]
     }
 }

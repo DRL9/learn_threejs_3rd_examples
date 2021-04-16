@@ -1,5 +1,6 @@
 import THREE from '../three.js';
 import Stats from '../stats.js';
+import dat from '../dat.gui.js';
 
 const canvasWrap = document.getElementById('canvasWrap');
 
@@ -35,20 +36,36 @@ function init() {
 
     enableShadow(scene, renderer, spotLight);
 
+    // 控制相机位置
+    const trackerController = window.initTrackballControls(camera, renderer);
+    // 简单计算每一帧的时间
+    const clock = new THREE.Clock();
+
     let stats = initStats();
+    const controller = initDatGUI();
     let i = 0;
     function render() {
+        trackerController.update(clock.getDelta());
+
         cube.position.setX((cube.position.x + 0.1) % 50);
         sphere.position.set(
-            14 * Math.cos(i++ * Math.PI * 0.01),
+            controller.radius *
+                Math.cos(i++ * Math.PI * controller.rotationSpeed),
             sphere.position.y,
-            14 * Math.sin(i * Math.PI * 0.01)
+            controller.radius * Math.sin(i * Math.PI * controller.rotationSpeed)
         );
         renderer.render(scene, camera);
         stats.update();
         requestAnimationFrame(render);
     }
     render();
+
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        // 记得调用这个
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
 }
 
 init();
@@ -164,4 +181,18 @@ function initStats(type) {
     stats.showPanel(panelType); // 0: fps, 1: ms, 2: mb, 3+: custom
     document.body.appendChild(stats.dom);
     return stats;
+}
+
+function initDatGUI() {
+    class Control {
+        constructor() {
+            this.rotationSpeed = 0.008;
+            this.radius = 11;
+        }
+    }
+    let c = new Control();
+    const gui = new dat.GUI();
+    gui.add(c, 'rotationSpeed', 0, 0.1);
+    gui.add(c, 'radius', 1, 15);
+    return c;
 }
