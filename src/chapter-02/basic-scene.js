@@ -7,6 +7,15 @@ function init() {
 
     const { camera, stat, renderer, scene } = initBase();
 
+    // 添加迷雾
+    // 先行增加浓度
+    scene.fog = new THREE.Fog(0xffffff, 5, 100);
+    // 指数增加浓度
+    scene.fog = new THREE.FogExp2(0xffffff, 0.01);
+
+    // 忽略children 设置的 material, 都使用这个。 这样可以有更好的性能
+    scene.overrideMaterial = new THREE.MeshLambertMaterial({ color: 0xff00ff });
+
     const planeGeometry = new THREE.PlaneGeometry(40, 40);
     const planeMaterial = new THREE.MeshLambertMaterial({ color: 0xaaaaaa });
     const plane = new THREE.Mesh(planeGeometry, planeMaterial);
