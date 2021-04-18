@@ -1,6 +1,6 @@
 import THREE from '../three.js';
 import dat from '../dat.gui.js';
-import { initStats } from '../utils';
+import { initStats } from '../utils.js';
 
 const canvasWrap = document.getElementById('canvasWrap');
 
@@ -117,7 +117,7 @@ function addCube(scene, useBasicMaterial) {
  */
 function addSphere(scene, useBasicMaterial) {
     // 球
-    const sphereGeometry = new THREE.SphereGeometry(Math.PI);
+    const sphereGeometry = new THREE.SphereGeometry(Math.PI, 20, 20);
     const sphereMaterial = useBasicMaterial
         ? new THREE.MeshBasicMaterial({
               color: 0x7777ff,

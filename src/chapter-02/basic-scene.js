@@ -1,14 +1,12 @@
 import THREE from '../three.js';
-import { initBase, initStats, enableShadow } from '../utils.js';
+import { initBase, enableShadow } from '../utils.js';
 import dat from '../dat.gui.js';
 
 function init() {
-    initStats();
-
     const { camera, stat, renderer, scene } = initBase();
 
     // 添加迷雾
-    // 先行增加浓度
+    // 线性增加浓度
     scene.fog = new THREE.Fog(0xffffff, 5, 100);
     // 指数增加浓度
     scene.fog = new THREE.FogExp2(0xffffff, 0.01);
@@ -19,6 +17,7 @@ function init() {
     const planeGeometry = new THREE.PlaneGeometry(40, 40);
     const planeMaterial = new THREE.MeshLambertMaterial({ color: 0xaaaaaa });
     const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+
     plane.rotation.x = -0.5 * Math.PI;
     scene.add(plane);
 
