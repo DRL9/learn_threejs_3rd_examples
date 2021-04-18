@@ -51,7 +51,7 @@ export function initBase() {
  */
 export function enableShadow(scene, renderer, spotLight) {
     renderer.shadowMap.enabled = true;
-    spotLight.castShadow = true;
+    spotLight && (spotLight.castShadow = true);
     scene.children.forEach(
         /**
          *

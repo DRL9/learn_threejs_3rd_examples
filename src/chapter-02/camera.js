@@ -1,5 +1,5 @@
 import THREE from '../three.js';
-import { initBase, enableShadow } from '../utils.js';
+import { initBase } from '../utils.js';
 import dat from '../dat.gui.js';
 
 function init() {
